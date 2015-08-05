@@ -13,10 +13,10 @@ echo form_open('insert_subject');
     <select class="selectpicker" data-size="5" data-live-search="true"  name="program_id" data-dropup-auto="false">        
         <option value=""> Select Program </option>
         <?php
-        $q = $this->db->query("select id, code, name from programs");
+        $q = $this->db->query("select id, code, name, school, student_tag from programs");
         foreach ($q->result() as $row) {
             ?>
-            <option value="<?= $row->id ?>" ><?= $row->code ?> <?= $row->name ?> </option>
+            <option value="<?= $row->id ?>" ><?= $row->code ?> <?= $row->name ?> (<?= $row->school ?>) (<?= $row->student_tag ?>)</option>
             <?php
         }
         ?>
