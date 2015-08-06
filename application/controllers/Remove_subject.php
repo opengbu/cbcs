@@ -13,7 +13,9 @@ class Remove_subject extends CI_Controller {
         if ($record_id == NULL || $record_id == "")
             redirect("all_subjects");
         $this->db->query("delete from course_structure where id = '$record_id'");
-        redirect("all_subjects");
+        $program_id = $this->input->get('program');
+        $semester = $this->input->get('semester');
+         redirect('/All_subjects?program=' . $program_id . '&semester=' . $semester);
     }
 
 }
