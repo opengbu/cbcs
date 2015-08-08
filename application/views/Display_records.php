@@ -71,7 +71,9 @@
         ?>
         <div  id="viewop">
             <div class="row">
-                <form action="" method="post">
+                <form action="All_subjects/insert" method="post" id = "insert_record" >
+                    <input type="hidden" name="semester" value="<?= $semester ?>" />
+                    <input type="hidden" name="program" value="<?= $program ?>" /> 
                     <div class="col-sm-5">
                         <select class="selectpicker" data-size="5" data-live-search="true"  name="subject_id" data-dropup-auto="false">        
                             <option value=""> Select Subject </option>
@@ -103,10 +105,11 @@
                     </div>
                 </form>
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <?php echo '<label><font color="red">' . validation_errors() . '</font></label>'; ?>
-                </div>
+            <div class="row" >
+                <br />
+                <font color="red"><b>
+                    <div class="col-sm-12" id="insert_errors"></div>
+                </b></font>
             </div>
             <br />
         </div>
@@ -122,7 +125,7 @@
         ?>
         <br /><br />
 
-        <ul class="nav nav-list col-sm-12"> 
+        <ul class="nav nav-list col-sm-12" id = "record_list"> 
             <b>
                 <li class="list-group-item">
                     <div class="row">
@@ -168,6 +171,8 @@
                 <?php
             }
             ?>
+        </ul>
+        <ul class="nav nav-list col-sm-12">
             <li class="list-group-item">
                 <div class="row">
                     <div class="col-sm-10">
@@ -189,5 +194,54 @@
     ?>
     <br>
 
-
 </div>
+
+<script type="text/javascript">
+    var frm = $('#insert_record');
+    frm.submit(function (ev) {
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (msg) {
+                var obj = JSON.parse(msg);
+                var error_list = document.getElementById('insert_errors');
+                if (obj.result === "error")
+                {
+                    error_list.innerHTML = obj.errors;
+                }
+                if (obj.result === "success")
+                {
+                    var record_list = document.getElementById('record_list');
+                    var data = '<li class = "list-group-item" > \
+                                    <div class = "row" > \
+                                    <div class = "col-sm-2" > \
+                                    ' + obj.sub_code + ' \
+                                    </div> \
+                                    <div class = "col-sm-1" > \
+                                    ' + obj.nature_code + ' \
+                                    </div> \
+                                    <div class = "col-sm-7" > \
+                                    ' + obj.name + ' \
+                                    </div> \
+                                    <div class = "col-sm-1" > \
+                                    ' + obj.credit + ' \
+                                    </div> \
+                                    <div class = "col-sm-1" > \
+                                    <a onclick = \
+"del_ask(\x27' + obj.record_id + '\x27, \x27' + obj.sub_code + '\x27, \x27' + obj.program + '\x27, \x27' + obj.semester + '\x27 )"\
+ class="pull-right btn btn-xs btn-danger"><i class="fa fa-trash-o fa-lg"></i> Delete </a>\
+                                    </div> \
+                                    </div> \
+                                    </li>';
+                    record_list.innerHTML = record_list.innerHTML + data;
+                    error_list.innerHTML = ""; //Remove old errors
+
+                }
+            }
+        });
+
+
+        ev.preventDefault();
+    });
+</script>1
