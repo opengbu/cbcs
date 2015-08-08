@@ -218,7 +218,7 @@
             url: frm.attr('action'),
             data: frm.serialize(),
             success: function (msg) {
-                if(document.getElementById("insert_errors") !== null)
+                if(document.getElementById("record_list") === null)
                     window.location.reload();
                 var obj = JSON.parse(msg);
                 var error_list = document.getElementById('insert_errors');

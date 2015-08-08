@@ -38,7 +38,7 @@ class All_subjects extends CI_Controller {
 
             $this->db->query("insert into course_structure (program_id, semester, subject_id, nature_id ) values ('$program_id', '$semester', '$subject_id', '$nature_id')");
             $record_id = $this->db->insert_id();
-            $get_sub_details = $this->db->query("select * from subject where id = '$subject_id'");
+            $get_sub_details = $this->db->query("select * from Subject where id = '$subject_id'");
             $sub_details = $get_sub_details->row();
             
             
