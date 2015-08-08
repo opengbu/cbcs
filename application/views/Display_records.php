@@ -12,6 +12,7 @@
         if (x == true)
             location.href = "remove_subject?course_id=" + str + "&program=" + pg + "&semester=" + sem;
     }
+    var total_credits = 0;
 </script>
 <div class="col-sm-12">
     <br /><br />
@@ -146,8 +147,11 @@
             </b>
             <?php
             foreach ($result->result() as $row) {
-                $sum+= $row->sub_credit;
+                // $sum+= $row->sub_credit;
                 ?>
+                <script>
+                    total_credits = total_credits + <?= $row->sub_credit; ?>
+                </script>
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col-sm-2">
@@ -179,7 +183,9 @@
                         <b>Total</b>
                     </div>
                     <div class="col-sm-2">
-                        <b><?= $sum ?></b>
+                        <b>
+                            <div id="total_credits"></div>
+                        </b>
                     </div>
                 </div>
             </li>
@@ -197,6 +203,13 @@
 </div>
 
 <script type="text/javascript">
+    function refresh_credits()
+    {
+        var credits_div = document.getElementById('total_credits');
+        credits_div.innerHTML = total_credits;
+    }
+    refresh_credits();
+
     var frm = $('#insert_record');
     frm.submit(function (ev) {
         $.ajax({
@@ -236,7 +249,8 @@
                                     </li>';
                     record_list.innerHTML = record_list.innerHTML + data;
                     error_list.innerHTML = ""; //Remove old errors
-
+                    total_credits = total_credits + parseInt(obj.credit); // add new credits;
+                    refresh_credits();
                 }
             }
         });
