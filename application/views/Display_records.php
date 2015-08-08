@@ -207,9 +207,10 @@
     {
         var credits_div = document.getElementById('total_credits');
         credits_div.innerHTML = total_credits;
-    }
-    refresh_credits();
-
+    }    
+    if(document.getElementById("total_credits") !== null)    
+        refresh_credits();
+    
     var frm = $('#insert_record');
     frm.submit(function (ev) {
         $.ajax({
@@ -217,6 +218,8 @@
             url: frm.attr('action'),
             data: frm.serialize(),
             success: function (msg) {
+                if(document.getElementById("insert_errors") !== null)
+                    window.location.reload();
                 var obj = JSON.parse(msg);
                 var error_list = document.getElementById('insert_errors');
                 if (obj.result === "error")
@@ -258,4 +261,4 @@
 
         ev.preventDefault();
     });
-</script>1
+</script>
