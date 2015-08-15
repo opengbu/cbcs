@@ -7,10 +7,15 @@ if ($this->input->get('program') != NULL)
         $program = "NULL";
 
     if ($this->input->get('semester') != NULL)
+    {
         $semester = $this->input->get('semester');
+        $select_rows = "select course_structure.semester, Subject.code as sub_code, Subject.name as sub_name, Subject.L,Subject.T,Subject.P, Subject.credit as sub_credit, nature.code as nature_code, course_structure.id as cs_id from course_structure, nature, Subject where course_structure.subject_id =  Subject.id and course_structure.nature_id = nature.id and course_structure.program_id = " . $program . " and course_structure.semester = " . $semester;
+    }
     else
+    {
         $semester = "NULL";
-    $select_rows = "select Subject.code as sub_code, Subject.name as sub_name, Subject.credit as sub_credit, nature.code as nature_code, course_structure.id as cs_id from course_structure, nature, Subject where course_structure.subject_id =  Subject.id and course_structure.nature_id = nature.id and course_structure.program_id = " . $program . " and course_structure.semester = " . $semester;
+        $select_rows = "select course_structure.semester, Subject.code as sub_code, Subject.name as sub_name, Subject.L,Subject.T,Subject.P, Subject.credit as sub_credit, nature.code as nature_code, course_structure.id as cs_id from course_structure, nature, Subject where course_structure.subject_id =  Subject.id and course_structure.nature_id = nature.id and course_structure.program_id = " . $program . " order by course_structure.semester";
+    }
     
 $setExcelName = "student";
 
@@ -18,16 +23,24 @@ $q = $this->db->query($select_rows);
 
 $setMainHeader="";
 $setData="";
+$setMainHeader .= "Semester \t";
     $setMainHeader .= "Code \t";
 	$setMainHeader .= "Nature \t";
 	$setMainHeader .= "Name \t";
+        $setMainHeader .= "L \t";
+        $setMainHeader .= "T \t";
+        $setMainHeader .= "P \t";
 	$setMainHeader .= "Credit \t" . "\n";
 
 foreach($q->result() as  $rec)   {
   $rowLine = '';
+  $rowLine .= $rec->semester ."\t";
     $rowLine .= $rec->sub_code ."\t";
 	$rowLine .= $rec->nature_code ."\t";
 	$rowLine .= $rec->sub_name ."\t";
+        $rowLine .= $rec->L ."\t";
+        $rowLine .= $rec->T ."\t";
+        $rowLine .= $rec->P ."\t";
 	$rowLine .= $rec->sub_credit ."\t";
 	$rowLine .= "\n";
   

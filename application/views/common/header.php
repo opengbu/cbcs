@@ -22,5 +22,5 @@
         <script type="text/javascript" src="<?php echo base_url() . 'application/views/common/' . 'js/bootstrap.min.js' ?>"></script>
         
     </head>
-    <body style="background-image: url(<?php echo base_url('application/views/common/background.jpg') ?>); background-attachment: fixed; background-repeat: repeat;">
+    <body style="background-image: url(<?php //echo base_url('application/views/common/background.jpg') ?>); background-attachment: fixed; background-repeat: repeat;">
         <div class="container" style="padding-top: 0px;">

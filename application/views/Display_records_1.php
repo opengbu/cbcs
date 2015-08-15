@@ -37,7 +37,7 @@
 
             <div class=" col-sm-3">
 
-                <select class="selectpicker" data-dropup-auto="false" data-size="5" data-live-search="true" onchange="this.form.submit()" name="semester" >        
+                <select class="selectpicker" data-dropup-auto="false" data-size="2" data-live-search="true" onchange="this.form.submit()" name="semester" >        
                     <option value="-1"> Select Semester </option>
                     <?php
                     for ($count = 1; $count <= 14; $count++) {
@@ -51,6 +51,25 @@
                 </select>   
             </div>
 
+        
+            
+            
+             <div class="col-sm-3">
+                        <select class="selectpicker" data-size="2" data-live-search="true"  name="nature_id" onchange="this.form.submit()" data-dropup-auto="false">        
+                            <option value=""> Select Nature </option>
+                            <?php
+                            $natures = $this->db->query("select id,code,name from nature");
+                            foreach ($natures->result() as $row) {
+                                ?>
+                                <option value="<?= $row->id ?>" 
+                                <?php if ($row->id == $this->input->get('nature_id')) echo 'selected="selected" '; ?>  
+                                        ><?= $row->code ?> - <?= $row->name ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+            
             <div class="col-sm-1">
                 <a href ="<?= site_url() . "create_subject" ?>" class="btn btn-primary"> Create </a>
             </div>
@@ -63,6 +82,11 @@
     else
         $program = "NULL";
 
+    if ($this->input->get('nature_id') != NULL)
+        $nature = $this->input->get('nature_id');
+    else
+        $nature = "NULL";
+    
     if ($this->input->get('semester') != NULL)
         $semester = $this->input->get('semester');
     else
@@ -75,6 +99,7 @@
                 <form action="All_subjects/insert" method="post" id = "insert_record" >
                     <input type="hidden" name="semester" value="<?= $semester ?>" />
                     <input type="hidden" name="program" value="<?= $program ?>" /> 
+                    <input type="hidden" name="nature_id" value="<?= $nature ?>" /> 
                     <div class="col-sm-5">
                         <select class="selectpicker" data-size="5" data-live-search="true"  name="subject_id" data-dropup-auto="false">        
                             <option value=""> Select Subject </option>
@@ -88,19 +113,7 @@
                             ?>
                         </select>
                     </div>
-                    <div class="col-sm-3">
-                        <select class="selectpicker" data-size="5" data-live-search="true"  name="nature_id" data-dropup-auto="false">        
-                            <option value=""> Select Nature </option>
-                            <?php
-                            $natures = $this->db->query("select id,code,name from nature");
-                            foreach ($natures->result() as $row) {
-                                ?>
-                                <option value="<?= $row->id ?>" ><?= $row->code ?> - <?= $row->name ?></option>
-                                <?php
-                            }
-                            ?>
-                        </select>
-                    </div>
+                   
                     <div class="col-sm-1">
                         <input type="submit" value="Insert" class="btn btn-primary"/>
                     </div>
@@ -191,7 +204,8 @@
             </li>
             <br>
             <a href ="<?= site_url('Cdownload/dnld?semester=' . $semester . '&program=' . $program) ?>" class="btn btn-primary"> Download in Excel </a>
-        <a href ="<?= site_url('Cdownload/dnld?program=' . $program) ?>" class="btn btn-primary"> Download ALL SEMESTER in Excel </a>
+            
+            
         </ul>
 
         <?php
@@ -219,7 +233,7 @@
             url: frm.attr('action'),
             data: frm.serialize(),
             success: function (msg) {
-                if(document.getElementById("record_list") === null)
+                if(document.getElementById("insert_errors") !== null)
                     window.location.reload();
                 var obj = JSON.parse(msg);
                 var error_list = document.getElementById('insert_errors');
